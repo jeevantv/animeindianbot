@@ -1,14 +1,12 @@
-import { navigateTo, context, requestExpandedMode } from "@devvit/web/client";
+import { context, navigateTo } from "@devvit/web/client";
 
-const docsLink = document.getElementById("docs-link") as HTMLDivElement;
-const playtestLink = document.getElementById("playtest-link") as HTMLDivElement;
-const discordLink = document.getElementById("discord-link") as HTMLDivElement;
-const startButton = document.getElementById(
-  "start-button",
-) as HTMLButtonElement;
+const startButton = document.getElementById("start-button") as HTMLButtonElement;
+const docsLink = document.getElementById("docs-link") as HTMLAnchorElement;
+const playtestLink = document.getElementById("playtest-link") as HTMLAnchorElement;
+const discordLink = document.getElementById("discord-link") as HTMLAnchorElement;
 
-startButton.addEventListener("click", (e) => {
-  requestExpandedMode(e, "game");
+startButton.addEventListener("click", () => {
+  alert("Ready to explore the Anime Indian Bot!");
 });
 
 docsLink.addEventListener("click", () => {
