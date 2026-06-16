@@ -1,18 +1,6 @@
 {
   "$schema": "https://developers.reddit.com/schema/config-file.v1.json",
   "name": "animeindianbot",
-  "post": {
-    "dir": "public",
-    "entrypoints": {
-      "default": {
-        "inline": true,
-        "entry": "splash.html"
-      },
-      "game": {
-        "entry": "game.html"
-      }
-    }
-  },
   "server": {
     "dir": "dist/server",
     "entry": "index.js"
@@ -26,19 +14,13 @@
     },
     "redis": true
   },
-  "menu": {
-    "items": [
-      {
-        "label": "Create a new post",
-        "description": "animeindianbot",
-        "location": "subreddit",
-        "forUserType": "moderator",
-        "endpoint": "/internal/menu/post-create"
+  "scheduler": {
+    "tasks": {
+      "example-1-min-scheduler": {
+        "endpoint": "/internal/scheduler/example-1-min-scheduler",
+        "cron": "*/1 * * * *"
       }
-    ]
-  },
-  "triggers": {
-    "onAppInstall": "/internal/on-app-install"
+    }
   },
   "scripts": {
     "dev": "node --experimental-strip-types ./tools/build.ts --watch",

@@ -1,8 +1,16 @@
-import { createServer, getServerPort } from "@devvit/web/server";
-import { serverOnRequest } from "./server.ts";
+import {
+    createServer,
+    getServerPort,
+} from "@devvit/web/server";
+import express from "express"
+import scheduler from "./scheduler";
 
-const server = createServer(serverOnRequest);
-const port: number = getServerPort();
+const app = express();
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.text());
+app.use("/internal/scheduler", scheduler);
 
-server.on("error", (err) => console.error(`server error; ${err.stack}`));
-server.listen(port);
+const server = createServer(app);
+server.on("error", (err) => console.error(`Server error: ${err.stack}`));
+server.listen(getServerPort()); 

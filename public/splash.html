@@ -1,32 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <link rel="stylesheet" type="text/css" href="splash.css" />
-    <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width, height=device-height, user-scalable=0"
-    />
-    <title>devvit</title>
-  </head>
-  <body class="app">
-    <img class="snoo" src="/snoo.png" alt="Snoo" />
-    <div class="content">
-      <h1 class="title" id="title"></h1>
-      <p class="description">
-        Edit <span class="code">src/client/splash.ts</span> to get started.
-      </p>
+
+<head>
+  <link rel="stylesheet" type="text/css" href="splash.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport"
+    content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width, height=device-height, user-scalable=0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+  <title>Anime Indian Bot</title>
+</head>
+
+<body class="app">
+  <!-- Animated background layers -->
+  <div class="bg-gradient"></div>
+  <div class="bg-glow"></div>
+
+  <main class="glass-card">
+    <div class="header">
+      <h1 class="title" id="title">Welcome</h1>
+      <p class="subtitle">Anime Indian Bot</p>
     </div>
-    <div>
-      <button class="start-button" id="start-button">Start</button>
+
+    <div class="action-section">
+      <button class="primary-btn" id="start-button">
+        <span class="btn-text">Enter Game</span>
+        <span class="btn-icon">→</span>
+      </button>
     </div>
-    <footer class="footer">
-      <div class="docs-link" tabindex="0" id="docs-link">Docs</div>
-      <span class="divider">|</span>
-      <div class="docs-link" tabindex="0" id="playtest-link">r/Devvit</div>
-      <span class="divider">|</span>
-      <div class="docs-link" tabindex="0" id="discord-link">Discord</div>
-    </footer>
-    <script type="module" src="splash.js" defer></script>
-  </body>
+  </main>
+
+  <footer class="footer">
+    <a class="footer-link" id="discord-link" tabindex="0">Discord</a>
+    <span class="divider">•</span>
+    <a class="footer-link" id="playtest-link" tabindex="0">r/Devvit</a>
+    <span class="divider">•</span>
+    <a class="footer-link" id="docs-link" tabindex="0">Docs</a>
+  </footer>
+
+  <script type="module" src="splash.js" defer></script>
+</body>
+
 </html>
