@@ -12,13 +12,17 @@
         "graphql.anilist.co"
       ]
     },
-    "redis": true
+    "redis": true,
+    "reddit": true
   },
   "scheduler": {
     "tasks": {
-      "example-1-min-scheduler": {
-        "endpoint": "/internal/scheduler/example-1-min-scheduler",
-        "cron": "*/1 * * * *"
+      "daily-schedule-job": {
+        "endpoint": "/internal/scheduler/daily-schedule-job",
+        "cron": "0 0 * * *"
+      },
+      "post-episode-alarm": {
+        "endpoint": "/internal/scheduler/post-episode-alarm"
       }
     }
   },

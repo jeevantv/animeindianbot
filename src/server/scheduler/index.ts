@@ -1,8 +1,10 @@
-import { Router } from "express"
-import { example_1_min_scheduler } from "./example-1-min-scheduler"
+import { Router } from "express";
+import { daily_schedule_job } from "./daily-schedule-job.js";
+import { post_episode_alarm } from "./post-episode-alarm.js";
 
-const scheduler: Router = Router()
+const scheduler: Router = Router();
 
-scheduler.post('/example-1-min-scheduler', example_1_min_scheduler)
+scheduler.post('/daily-schedule-job', daily_schedule_job);
+scheduler.post('/post-episode-alarm', post_episode_alarm);
 
-export default scheduler
+export default scheduler;
