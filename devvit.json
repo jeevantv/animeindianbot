@@ -1,32 +1,15 @@
 {
-  "$schema": "https://developers.reddit.com/schema/config-file.v1.json",
   "name": "animeindianbot",
-  "server": {
-    "dir": "dist/server",
-    "entry": "index.js"
-  },
-  "permissions": {
-    "http": {
-      "enable": true,
-      "domains": [
-        "graphql.anilist.co"
-      ]
-    },
-    "redis": true
-  },
+  "server": {},
   "scheduler": {
     "tasks": {
-      "example-1-min-scheduler": {
-        "endpoint": "/internal/scheduler/example-1-min-scheduler",
-        "cron": "*/1 * * * *"
+      "daily-schedule-job": {
+        "endpoint": "/internal/scheduler/daily-schedule-job",
+        "cron": "0 0 * * *"
+      },
+      "post-episode-alarm": {
+        "endpoint": "/internal/scheduler/post-episode-alarm"
       }
     }
-  },
-  "scripts": {
-    "dev": "node --experimental-strip-types ./tools/build.ts --watch",
-    "build": "node --experimental-strip-types ./tools/build.ts --minify"
-  },
-  "dev": {
-    "subreddit": "animeindianbot_dev"
   }
 }
