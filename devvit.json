@@ -9,11 +9,41 @@
     "http": {
       "enable": true,
       "domains": [
-        "graphql.anilist.co"
+        "graphql.anilist.co",
+        "youtube.com"
       ]
     },
     "redis": true,
     "reddit": true
+  },
+  "settings": {
+    "subreddit": {
+      "episodeDiscussionFlairId": {
+        "type": "string",
+        "label": "Episode Discussion Flair ID It is required for this bot to run",
+        "defaultValue": ""
+      },
+      "enableSocialLinks": {
+        "type": "boolean",
+        "defaultValue": false,
+        "label": "Enable social links in post body for Episode Discussion"
+      },
+      "discordInviteLink": {
+        "type": "string",
+        "defaultValue": "",
+        "label": "Discord Invite Link"
+      },
+      "instagramLink": {
+        "type": "string",
+        "defaultValue": "",
+        "label": "Instagram Link"
+      },
+      "youtubeChannelLink": {
+        "type": "string",
+        "defaultValue": "",
+        "label": "Youtube Channel Link"
+      }
+    }
   },
   "scheduler": {
     "tasks": {
@@ -23,6 +53,10 @@
       },
       "post-episode-alarm": {
         "endpoint": "/internal/scheduler/post-episode-alarm"
+      },
+      "muse-india-yt-rss-post": {
+        "endpoint": "/internal/scheduler/muse-india-yt-rss-post",
+        "cron": "*/15 * * * *"
       }
     }
   },
