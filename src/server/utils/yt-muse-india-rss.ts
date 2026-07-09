@@ -1,4 +1,3 @@
-
 const RSS_URL = (channelId: string): string =>
     `https://www.youtube.com/feeds/videos.xml?channel_id=${channelId}`;
 

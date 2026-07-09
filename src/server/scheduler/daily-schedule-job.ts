@@ -1,50 +1,70 @@
 import { fetchNext24Hours } from '../utils/anilist.js';
 import { redis, scheduler } from "@devvit/web/server";
+import { scheduleKey, jobId } from '../redis/keys.js'
+import type { Response, Request } from 'express';
+import { ApiError, ApiResponse } from '../utils';
+import type { ScheduledJob } from '@devvit/web/server';
 
-export async function daily_schedule_job(req: any, res: any): Promise<any> {
+export async function daily_schedule_job(_req: Request, res: Response): Promise<any> {
   try {
-    console.log("[Daily Cron] Starting automated synchronization pipeline");
-    
+    console.debug("[Daily Cron] Starting automated synchronization pipeline");
+
     const scheduleList = await fetchNext24Hours();
     if (!scheduleList || scheduleList.length === 0) {
-      console.log("[Daily Cron] No upcoming releases detected for this 24-hour window");
-      return res.status(200).json({ message: "Job completed: Empty schedule list" });
+      console.debug("[Daily Cron] No upcoming releases detected for this 24-hour window");
+      throw new ApiError(400, "No upcoming releases detected for this 24-hour window")
     }
 
-    let alarmsSet = 0;
-
     for (const item of scheduleList) {
-      const mediaId = item.mediaId || item.media?.id;
+      const mediaId = item.media?.id;
       const epNum = item.episode;
-      const airingAtUnix = item.airingAt; 
+      const airingAtUnix = item.airingAt;
 
       if (!mediaId || !epNum || !airingAtUnix) {
         continue;
       }
-      
-      const dedupKey = `alarm:${mediaId}:${epNum}`;
-      const alreadyScheduled = await redis.get(dedupKey);
+
+      console.debug(`[Daily Cron] Processing item ${JSON.stringify(item)}`)
+      const alreadyScheduled = await redis.exists(scheduleKey(mediaId, epNum));
 
       if (!alreadyScheduled) {
-        await scheduler.runJob({
-          name: 'post-episode-alarm', 
-          data: { mediaId: mediaId, episode: epNum },
-          runAt: new Date(airingAtUnix * 1000) 
-        });
+        const scheduledJob: ScheduledJob = {
+          id: jobId(mediaId, epNum),
+          name: 'post-episode-schedule',
+          data: {
+            mediaId: mediaId,
+            episode: epNum
+          },
+          runAt: new Date(airingAtUnix * 1000),
+        }
+        const reddidJobId = await scheduler.runJob(scheduledJob)
+
+        await redis.hSet(scheduleKey(mediaId, epNum),
+          {
+            "titleEnglish": item.media.title.english || "English Name N/A",
+            "titleRomaji": item.media.title.romaji || "Romaji Name N/A",
+            "episodeNumber": String(item.episode),
+            "airingAt": new Date(item.airingAt * 1000).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }),
+            "popularity": String(item.media.popularity),
+            "countryOfOrigin": item.media.countryOfOrigin,
+            "format": item.media.format,  // TV or OVA
+            "jobId": jobId(mediaId, epNum),
+            "redditJobId": reddidJobId,
+            "canceled": "0"
+          });
 
         // Set the tracking key to expire after 48 hours
-        await redis.set(dedupKey, "1", { expiration: new Date(Date.now() + 172800 * 1000) });
-        
-        alarmsSet++;
-        console.log(`[Daily Cron] Scheduled post-episode-alarm for Media ID: ${mediaId}, Episode: ${epNum}`);
+        await redis.expire(scheduleKey(mediaId, epNum), 172800);
+
+        console.log(`[Daily Cron] Scheduled post-episode-job for Media ID: ${mediaId}, Episode: ${epNum} with reddit Job ID ${reddidJobId}`);
       }
     }
 
-    console.log(`[Daily Cron] Synchronization pipeline finished. Operations queued: ${alarmsSet}`);
-    return res.status(200).json({ message: `Successfully queued ${alarmsSet} jobs.` });
-    
+    console.log(`[Daily Cron] Synchronization pipeline finished. Operations queued`);
+    return res.status(200).json(new ApiResponse(200, null));
+
   } catch (error: any) {
     console.error("[Daily Cron] Master process encountered an error:", error.message);
-    return res.status(500).json({ error: "Internal Server Error" });
+    throw new ApiError(500, "Internal server error")
   }
 }
