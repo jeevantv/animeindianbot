@@ -1,15 +1,38 @@
 {
   "$schema": "https://developers.reddit.com/schema/config-file.v1.json",
   "name": "animeindianbot",
+  "post": {
+    "dir": "dist/client",
+    "entrypoints": {
+      "default": {
+        "entry": "splash.html",
+        "inline": true,
+        "height": "regular"
+      },
+      "episode-schedule-dashbord": {
+        "entry": "episode-schedule-dashbord.html",
+        "height": "tall"
+      },
+      "polls-splash": {
+        "entry": "polls-splash.html",
+        "height": "regular"
+      },
+      "poll-options": {
+        "entry": "poll-options.html",
+        "height": "tall"
+      }
+    }
+  },
   "server": {
     "dir": "dist/server",
-    "entry": "index.js"
+    "entry": "index.cjs"
   },
   "permissions": {
     "http": {
       "enable": true,
       "domains": [
-        "graphql.anilist.co"
+        "graphql.anilist.co",
+        "youtube.com"
       ]
     },
     "redis": true,
@@ -21,14 +44,73 @@
         "endpoint": "/internal/scheduler/daily-schedule-job",
         "cron": "0 0 * * *"
       },
-      "post-episode-alarm": {
-        "endpoint": "/internal/scheduler/post-episode-alarm"
+      "post-episode-schedule": {
+        "endpoint": "/internal/scheduler/post-episode-schedule"
+      },
+      "muse-india-yt-rss-post": {
+        "endpoint": "/internal/scheduler/muse-india-yt-rss-post",
+        "cron": "*/15 * * * *"
       }
     }
   },
+  "settings": {
+    "subreddit": {
+      "episodeDiscussionFlairId": {
+        "type": "string",
+        "label": "Episode Discussion Flair ID It is required for this bot to run",
+        "defaultValue": ""
+      },
+      "enableSocialLinks": {
+        "type": "boolean",
+        "defaultValue": false,
+        "label": "Enable social links in post body for Episode Discussion"
+      },
+      "discordInviteLink": {
+        "type": "string",
+        "defaultValue": "",
+        "label": "Discord Invite Link"
+      },
+      "instagramLink": {
+        "type": "string",
+        "defaultValue": "",
+        "label": "Instagram Link"
+      },
+      "youtubeChannelLink": {
+        "type": "string",
+        "defaultValue": "",
+        "label": "Youtube Channel Link"
+      },
+      "xLink": {
+        "type": "string",
+        "defaultValue": "",
+        "label": "x Link"
+      }
+    }
+  },
+  "menu": {
+    "items": [
+      {
+        "label": "Episode Schedule Dashbord",
+        "location": "subreddit",
+        "description": "Check episode that are releasing today",
+        "forUserType": "moderator",
+        "endpoint": "/internal/menu/create-splash-post"
+      },
+      {
+        "label": "Create Poll Post",
+        "location": "subreddit",
+        "description": "Create a poll post for your subreddit",
+        "forUserType": "moderator",
+        "endpoint": "/internal/menu/create-poll-postForm"
+      }
+    ]
+  },
+  "forms": {
+    "pollForm": "/internal/form/pollForm"
+  },
   "scripts": {
-    "dev": "node --experimental-strip-types ./tools/build.ts --watch",
-    "build": "node --experimental-strip-types ./tools/build.ts --minify"
+    "dev": "vite build --watch",
+    "build": "vite build"
   },
   "dev": {
     "subreddit": "animeindianbot_dev"
