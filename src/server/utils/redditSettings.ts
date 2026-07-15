@@ -16,6 +16,6 @@ export async function socialSettings(): Promise<string | null> {
     if (youtubeChannelLink) links.push(`- [Youtube](<${youtubeChannelLink}>)`);
     if (xLink) links.push(`- [X.com](<${xLink}>)`);
 
-    const socialLinks = `Our Socials\n\n${links.join('\n\n')}`;
+    const socialLinks = `**Our Socials:**\n\n${links.join('\n\n')}`;
     return socialLinks;
 }

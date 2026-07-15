@@ -18,6 +18,7 @@ menuRouter.post<string, never, UiResponse, never>('/create-splash-post', async (
             }
         }
     );
+    await reddit.remove(post.id, true)
     return res.json({
         showToast: { text: `Post ${post.id} created.`, appearance: "success" },
         navigateTo: post,
@@ -81,5 +82,57 @@ menuRouter.post<string, never, UiResponse, MenuItemRequest>('/create-poll-postFo
         }
     })
 })
+
+menuRouter.post<string, never, UiResponse, MenuItemRequest>('/create-poll-v2-postForm', async (_req, res) => {
+    const flairs = await reddit.getPostFlairTemplates(context.subredditName);
+    return res.json({
+        showForm: {
+            name: 'poll-v2-Form',
+            form: {
+                title: "Create New Poll v2 (Inline)",
+                fields: [
+                    {
+                        type: 'select',
+                        label: 'Flair Id',
+                        name: 'flairId',
+                        options: flairs.map(item => ({ "label": item.text, "value": item.id })),
+                        required: true
+                    },
+                    {
+                        type: 'string',
+                        label: 'Poll title',
+                        name: 'title',
+                        required: true
+                    },
+                    {
+                        type: "paragraph",
+                        label: 'Poll options',
+                        name: 'poll-options',
+                        required: true,
+                        placeholder: 'after first poll option add , for second one',
+                        helpText: 'ex: attack on titian S4,Demon Slayer S3,My Hero Academia'
+                    },
+                    {
+                        type: 'number',
+                        label: "Poll duration (in days)",
+                        name: 'pollDurationDays',
+                        required: true,
+                        defaultValue: 3,
+                        helpText: 'How many days should this poll remain open?'
+                    },
+                    {
+                        type: 'boolean',
+                        label: "allow multiple votes",
+                        name: 'allowMultipleVotes',
+                        defaultValue: false
+                    }
+                ],
+                acceptLabel: "Create Poll v2",
+                cancelLabel: "Cancel",
+                description: "Fill this form to create an inline Poll v2 post in subreddit"
+            }
+        }
+    });
+});
 
 export default menuRouter;

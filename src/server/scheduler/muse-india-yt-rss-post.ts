@@ -5,8 +5,16 @@ import { context, reddit, settings, redis } from "@devvit/web/server"
 export async function museIndiaScheduler(_req: Request, res: Response): Promise<void> {
     console.debug('[Muse India Scheduler] Starting job execution')
     const MUSE_INDIA_CHANNEL_ID = 'UCYYhAzgWuxPauRXdPpLAX3Q'
-    const PostFlairId: string | undefined = await settings.get("episodeDiscussionFlairId")
+    const [enableMuseIndiaDicussion, PostFlairId] = await Promise.all([
+        settings.get("enableMuseIndiaDicussion"),
+        settings.get("episodeDiscussionFlairId")
+    ])
 
+    if (!enableMuseIndiaDicussion) {
+        console.debug('[Muse India Scheduler] Enable Muse India Dicussion is not enabled');
+        res.status(500).json(new ApiError(500, 'Enable Muse India Dicussion is not enabled'));
+        return;
+    }
     if (!PostFlairId) {
         console.error('[Muse India Scheduler] Flair ID is not set');
         res.status(500).json(new ApiError(500, 'Flair ID is not set'));
@@ -46,14 +54,14 @@ export async function museIndiaScheduler(_req: Request, res: Response): Promise<
 
             console.debug(`[Muse India Scheduler] Posting discussion thread for: ${parsed.showName} Episode ${parsed.episodeNumber}`);
             const post = await reddit.submitPost({
-                flairId: PostFlairId,
+                flairId: PostFlairId as string,
                 subredditName: context.subredditName!,
                 title: `[Muse India] ${parsed.showName} - Episode ${parsed.episodeNumber} | ${parsed.language} Discussion Thread`,
                 text: `
                     Muse India has dropped a new episode of ${parsed.showName} - Episode ${parsed.episodeNumber}\n\n 
                     ${parsed.language ? `**Language/Dub:** ${parsed.language}` : ''}\n\n
                     ---
-                    Watch the episode here:\n\n
+                    **Watch here:**\n\n
                     [YouTube](<https://www.youtube.com/watch?v=${upload.videoId}>)\n\n
                     **Reminder:** No spoilers beyond this episode.\n\n
                     ${socialLinks ? `---\n\n ${socialLinks}\n\n` : ''} 
