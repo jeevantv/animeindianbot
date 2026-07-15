@@ -1,16 +1,41 @@
 import { context, requestExpandedMode } from '@devvit/web/client'
-import { StrictMode } from 'react';
+import { StrictMode, useState, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
 import './index.css';
 
 const PollSplash = () => {
-    console.log("Splash screen", context.postData)
+    const [timeLeft, setTimeLeft] = useState('');
+
+    useEffect(() => {
+        const expirationTimestamp = context.postData?.expirationTimestamp as string | undefined;
+        if (!expirationTimestamp) return;
+
+        const tick = () => {
+            const diff = new Date(expirationTimestamp).getTime() - Date.now();
+            if (diff <= 0) {
+                setTimeLeft('Poll ended');
+                return;
+            }
+            const d = Math.floor(diff / 86400000);
+            const h = Math.floor((diff % 86400000) / 3600000);
+            const m = Math.floor((diff % 3600000) / 60000);
+            const s = Math.floor((diff % 60000) / 1000);
+            setTimeLeft(`${d}d ${h}h ${m}m ${s}s remaining`);
+        };
+
+        tick();
+        const interval = setInterval(tick, 1000);
+        return () => clearInterval(interval);
+    }, []);
     return (
         <div className="flex relative flex-col justify-center items-center min-h-screen bg-slate-50 text-slate-900 dark:bg-gradient-to-br dark:from-slate-900 dark:via-emerald-950 dark:to-slate-900 dark:text-white overflow-hidden">
             <div className="absolute top-[-10%] left-[-10%] w-96 h-96 bg-emerald-200 dark:bg-emerald-600 rounded-full mix-blend-multiply filter blur-[128px] opacity-60 dark:opacity-40 animate-pulse"></div>
             <div className="absolute bottom-[-10%] right-[-10%] w-96 h-96 bg-teal-200 dark:bg-teal-600 rounded-full mix-blend-multiply filter blur-[128px] opacity-60 dark:opacity-40 animate-pulse" style={{ animationDelay: '2s' }}></div>
 
             <div className="z-10 flex flex-col items-center gap-8 w-full max-w-md p-10 bg-white/80 dark:bg-white/5 backdrop-blur-xl rounded-[2.5rem] shadow-xl dark:shadow-2xl border border-slate-200 dark:border-white/10">
+                <span className="px-4 py-1.5 text-xs font-semibold tracking-widest uppercase rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-700/50">
+                    🗳️ Community Poll
+                </span>
                 <div className="relative group">
                     <div className="absolute -inset-1 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full blur opacity-50 dark:opacity-75 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"></div>
                     <img
@@ -24,11 +49,16 @@ const PollSplash = () => {
 
                 <div className="flex flex-col items-center gap-2 w-full">
                     <h2 className="text-lg font-medium text-slate-700 dark:text-slate-300 text-center mt-2">
-                        Hey {context?.username ?? 'there'} 👋
+                        Hey {context?.username ?? 'there'}
                     </h2>
                     <p className="text-sm text-center text-slate-500 dark:text-slate-400 mt-3 font-light leading-relaxed">
                         {context.postData?.body as string}
                     </p>
+                    {timeLeft && (
+                        <span className="mt-2 px-3 py-1 text-xs font-medium rounded-full bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400">
+                            {timeLeft}
+                        </span>
+                    )}
                 </div>
 
                 <div className="w-full mt-6">
@@ -36,7 +66,7 @@ const PollSplash = () => {
                         className="relative flex w-full items-center justify-center bg-gradient-to-r from-emerald-500 to-teal-500 text-white h-14 rounded-2xl font-bold text-lg shadow-[0_0_20px_rgba(16,185,129,0.3)] dark:shadow-[0_0_20px_rgba(16,185,129,0.4)] hover:shadow-[0_0_30px_rgba(16,185,129,0.5)] dark:hover:shadow-[0_0_30px_rgba(16,185,129,0.6)] hover:scale-[1.02] transform transition-all duration-300"
                         onClick={(e) => requestExpandedMode(e.nativeEvent, 'poll-options')}
                     >
-                        Participate in poll
+                        Participate <span className="ml-2">→</span>
                     </button>
                 </div>
             </div>

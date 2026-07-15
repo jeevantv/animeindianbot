@@ -53,6 +53,9 @@ export async function getLatestUploads(channelId: string): Promise<MuseUpload[]>
 }
 
 export function parseDubTitle(title: string): ParsedDubTitle | null {
+    if (/\b(?:preview|teaser|trailer|clip|clips|shorts?|pv|highlight|highlights|announcement|schedule|op|ed|opening|ending)\b/i.test(title)) {
+        return null;
+    }
     if (!/Episode\s*\d+/i.test(title)) return null;
 
     const tagsMatch = title.match(/\[(.*?)\]/g);
@@ -70,8 +73,11 @@ export function parseDubTitle(title: string): ParsedDubTitle | null {
         return null;
     }
 
+    const rawShowName = match[1].replace(/[-\s|]+$/, '').trim();
+    const showName = rawShowName.replace(/^[《【]/, '').replace(/[》】]$/, '').trim();
+
     return {
-        showName: match[1].replace(/[-\s|]+$/, '').trim(),
+        showName,
         episodeNumber: parseInt(match[2], 10),
         language
     };

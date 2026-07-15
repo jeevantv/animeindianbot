@@ -5,6 +5,8 @@ import './index.css'
 
 interface scheduleRows {
     airingAt: string
+    delayedByMins?: string
+    scheduledPostAt?: string
     canceled: string
     countryOfOrigin: string
     episodeNumber: string
@@ -97,7 +99,7 @@ export const EpisodeScheduleDashbord = () => {
 
                 {isLoading ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {[1, 2, 3, 4, 5, 6].map((i) => (
+                        {Array.from({ length: 6 }, (_, i) => (
                             <div key={i} className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden animate-pulse">
                                 <div className="bg-slate-200 dark:bg-slate-700 h-1.5 w-full"></div>
                                 <div className="p-5 space-y-4">
@@ -125,7 +127,7 @@ export const EpisodeScheduleDashbord = () => {
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
                         {rows.map((row, index) => (
-                            <div key={row.jobId || index} className="flex flex-col bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-indigo-500/10 hover:-translate-y-1">
+                            <div key={index} className="flex flex-col bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-indigo-500/10 hover:-translate-y-1">
                                 <div className="bg-gradient-to-r from-indigo-500 to-fuchsia-500 h-1.5 w-full shrink-0"></div>
                                 <div className="p-5 flex flex-col flex-grow">
                                     <div className="flex justify-between items-start mb-4 gap-2">
@@ -138,8 +140,13 @@ export const EpisodeScheduleDashbord = () => {
                                     </div>
 
                                     <div className="space-y-2 mb-4 flex-grow">
-                                        <div className="flex items-center text-sm text-slate-600 dark:text-slate-400">
-                                            <span>{row.airingAt} IST</span>
+                                        <div className="flex flex-col text-sm text-slate-600 dark:text-slate-400 gap-1">
+                                            <span><strong>Airing:</strong> {row.airingAt} IST</span>
+                                            {row.delayedByMins && (
+                                                <span className="text-indigo-600 dark:text-indigo-400 font-medium">
+                                                    <strong>Posting:</strong> {row.scheduledPostAt} IST (+{row.delayedByMins}m delay)
+                                                </span>
+                                            )}
                                         </div>
                                         <div className="flex items-center text-sm text-slate-600 dark:text-slate-400">
                                             <span>{row.countryOfOrigin} &bull; {row.format}</span>
@@ -158,7 +165,7 @@ export const EpisodeScheduleDashbord = () => {
                                                 <button onClick={() => toggleDetails(row.jobId)} className="px-3 py-1 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs font-semibold rounded-md transition-colors border border-slate-200 dark:border-slate-600 cursor-pointer">
                                                     {expandedJobId === row.jobId ? 'Hide Details' : 'Details'}
                                                 </button>
-                                                {row.canceled === "0" || row.canceled === "false" || !row.canceled ? (
+                                                {row.canceled !== "1" ? (
                                                     <>
                                                         <span className="px-2 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 text-xs font-semibold rounded-md uppercase tracking-wider">Active</span>
                                                         <button onClick={() => handleCancel(row.redditJobId)} className="px-3 py-1 bg-white dark:bg-slate-800 hover:bg-red-50 dark:hover:bg-red-900/30 text-red-600 dark:text-red-400 text-xs font-semibold rounded-md transition-colors border border-slate-200 dark:border-slate-600 hover:border-red-200 dark:hover:border-red-800/50 cursor-pointer">

@@ -20,6 +20,11 @@
       "poll-options": {
         "entry": "poll-options.html",
         "height": "tall"
+      },
+      "polls-v2": {
+        "entry": "polls-v2.html",
+        "inline": true,
+        "height": "regular"
       }
     }
   },
@@ -60,10 +65,20 @@
         "label": "Episode Discussion Flair ID It is required for this bot to run",
         "defaultValue": ""
       },
+      "DealyedByMins": {
+        "type": "string",
+        "label": "Dealy episode Discussion thread in mins",
+        "defaultValue": "120"
+      },
+      "enableMuseIndiaDicussion": {
+        "type": "boolean",
+        "label": "Enable Muse India Youtube channel Episode Discussion thread",
+        "defaultValue": false
+      },
       "enableSocialLinks": {
         "type": "boolean",
         "defaultValue": false,
-        "label": "Enable social links in post body for Episode Discussion"
+        "label": "Enable social links in post body for Episode Discussion thread"
       },
       "discordInviteLink": {
         "type": "string",
@@ -102,11 +117,19 @@
         "description": "Create a poll post for your subreddit",
         "forUserType": "moderator",
         "endpoint": "/internal/menu/create-poll-postForm"
+      },
+      {
+        "label": "Create Poll Post v2",
+        "location": "subreddit",
+        "description": "Create an inline poll post (v2) for your subreddit",
+        "forUserType": "moderator",
+        "endpoint": "/internal/menu/create-poll-v2-postForm"
       }
     ]
   },
   "forms": {
-    "pollForm": "/internal/form/pollForm"
+    "pollForm": "/internal/form/pollForm",
+    "poll-v2-Form": "/internal/form/poll-v2-Form"
   },
   "scripts": {
     "dev": "vite build --watch",
