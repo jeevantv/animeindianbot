@@ -135,4 +135,42 @@ menuRouter.post<string, never, UiResponse, MenuItemRequest>('/create-poll-v2-pos
     });
 });
 
+menuRouter.post<string, never, UiResponse, MenuItemRequest>('/create-schedule-form', async (_req, res) => {
+    return res.json({
+        showForm: {
+            name: 'schedule-anime-Form',
+            form: {
+                title: "Schedule Anime Episode Post",
+                fields: [
+                    {
+                        type: 'number',
+                        label: 'AniList Media ID',
+                        name: 'mediaId',
+                        required: true,
+                        helpText: 'The AniList ID of the anime (e.g. 154587 for Frieren)'
+                    },
+                    {
+                        type: 'number',
+                        label: 'Episode Number',
+                        name: 'episode',
+                        required: true,
+                        helpText: 'The episode number to schedule (e.g. 1)'
+                    },
+                    {
+                        type: 'string',
+                        label: 'Time (HH:MM 24 hrs format, current date only)',
+                        name: 'time',
+                        required: true,
+                        placeholder: 'e.g. 14:30 or 21:00',
+                        helpText: 'Enter exact air time for today in 24-hour format (HH:MM)'
+                    }
+                ],
+                acceptLabel: "Schedule Post",
+                cancelLabel: "Cancel",
+                description: "Manually schedule an anime episode discussion post"
+            }
+        }
+    });
+});
+
 export default menuRouter;

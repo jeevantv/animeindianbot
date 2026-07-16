@@ -8,12 +8,13 @@ An automated Reddit bot built on [Devvit](https://developers.reddit.com/) design
 - **Schedule Dashboard**: Interactive dashboard showcasing streaming links and schedules for anime episodes airing on the current day.
 - **Polls**: Moderators can create interactive anime discussions and community polls with real-time voting progress and percentage bars right inside Reddit.
 - **Muse India Episode Discussion Thread**: Creates new anime episode discussion thread for official Muse India YouTube uploads.
+- **Manual Episode Scheduling**: Moderators can manually schedule episode discussion threads for any anime using its AniList Media ID, episode number, and exact air time.
 
 ## Bot Settings
 Moderators can configure the following settings:
 
 - **Episode Discussion Flair ID**: Required post flair ID assigned when automated discussion threads are published.
-- **Delay Minutes**: Optional delay in minutes (defaults to 120, can be set to 0) before posting the discussion thread.
+- **Delay Minutes**: Optional delay in minutes (defaults to 30, can be set to 0) before posting the discussion thread.
 - **Enable Muse India Discussions**: Fetches new episode uploads from Muse India and creates discussion threads.
 - **Enable Social Links**: Toggles appending community social links (Discord, Instagram, YouTube, X) at the bottom of discussion threads.
 - **Social Media URLs**: Individual URL fields to configure your community Discord invite, Instagram profile, YouTube channel, and X (Twitter) profile.
