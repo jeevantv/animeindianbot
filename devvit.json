@@ -68,7 +68,7 @@
       "DealyedByMins": {
         "type": "string",
         "label": "Dealy episode Discussion thread in mins",
-        "defaultValue": "120"
+        "defaultValue": "30"
       },
       "enableMuseIndiaDicussion": {
         "type": "boolean",
@@ -124,12 +124,20 @@
         "description": "Create an inline poll post (v2) for your subreddit",
         "forUserType": "moderator",
         "endpoint": "/internal/menu/create-poll-v2-postForm"
+      },
+      {
+        "label": "Schedule Anime Episode Post",
+        "location": "subreddit",
+        "description": "Manually schedule an anime episode discussion post",
+        "forUserType": "moderator",
+        "endpoint": "/internal/menu/create-schedule-form"
       }
     ]
   },
   "forms": {
     "pollForm": "/internal/form/pollForm",
-    "poll-v2-Form": "/internal/form/poll-v2-Form"
+    "poll-v2-Form": "/internal/form/poll-v2-Form",
+    "schedule-anime-Form": "/internal/form/schedule-anime-Form"
   },
   "scripts": {
     "dev": "vite build --watch",
