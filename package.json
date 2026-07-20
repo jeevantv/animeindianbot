@@ -16,14 +16,14 @@
     "node": ">=22.6.0"
   },
   "dependencies": {
-    "@devvit/web": "0.13.6",
-    "devvit": "0.13.6",
+    "@devvit/web": "0.13.9",
+    "devvit": "0.13.9",
     "express": "^5.2.1",
     "react": "^19.2.7",
     "react-dom": "^19.2.7"
   },
   "devDependencies": {
-    "@devvit/start": "^0.13.6",
+    "@devvit/start": "^0.13.9",
     "@tailwindcss/vite": "^4.3.2",
     "@types/express": "^5.0.6",
     "@types/node": "22.19.19",
