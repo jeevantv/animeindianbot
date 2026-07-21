@@ -19,7 +19,7 @@
     "@devvit/web": "0.13.6",
     "devvit": "0.13.6",
     "express": "^5.2.1",
-    "react": "^19.2.7",
+    "react": "^19.2.8",
     "react-dom": "^19.2.7"
   },
   "devDependencies": {
