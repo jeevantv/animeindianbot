@@ -26,5 +26,5 @@ Moderators can configure the following settings:
 
 ## Changelog
 
-### v0.0.4 — Initial Release
+### v0.0.6 — Initial Release
 - Initial release of Anime Indian Bot featuring automated airing schedules, Muse India alerts, interactive polls, and customizable moderator settings.
