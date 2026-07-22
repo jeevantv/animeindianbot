@@ -12,7 +12,9 @@ export const getScheduledJob = async (_req: Request, res: Response): Promise<any
             const jobData = job.data as { mediaId?: string | number, episode?: string | number } | undefined;
             if (jobData?.mediaId && jobData?.episode) {
                 const redisData = await redis.hGetAll(scheduleKey(jobData.mediaId, jobData.episode))
-                data.push(redisData)
+                if (redisData && Object.keys(redisData).length > 0 && redisData.jobId) {
+                    data.push(redisData)
+                }
             }
         }
         return res.status(200).json(new ApiResponse(200, data));

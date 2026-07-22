@@ -142,7 +142,7 @@ export const EpisodeScheduleDashbord = () => {
                                     <div className="space-y-2 mb-4 flex-grow">
                                         <div className="flex flex-col text-sm text-slate-600 dark:text-slate-400 gap-1">
                                             <span><strong>Airing:</strong> {row.airingAt} IST</span>
-                                            {row.delayedByMins && (
+                                            {row.delayedByMins && row.delayedByMins !== "0" && row.delayedByMins !== "NaN" && (
                                                 <span className="text-indigo-600 dark:text-indigo-400 font-medium">
                                                     <strong>Posting:</strong> {row.scheduledPostAt} IST (+{row.delayedByMins}m delay)
                                                 </span>

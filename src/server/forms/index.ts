@@ -144,13 +144,16 @@ formRouter.post<string, never, UiResponse, ScheduleAnimeForm>('/schedule-anime-F
     const minutes = parseInt(timeMatch[2], 10);
 
     const now = new Date();
-    const airingAtDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes, 0, 0);
-    const airingAtUnix = Math.floor(airingAtDate.getTime() / 1000);
+    const formatter = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Kolkata', year: 'numeric', month: '2-digit', day: '2-digit' });
+    const [year, month, day] = formatter.format(now).split('-').map(Number);
 
-    const delay = await settings.get("DealyedByMins");
-    const delayMins = Number(delay) || 0;
-
-    const scheduledTime = new Date((airingAtUnix + delayMins * 60) * 1000);
+    const isoString = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}T${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:00+05:30`;
+    const scheduledTime = new Date(isoString);
+    if (scheduledTime <= now) {
+        scheduledTime.setDate(scheduledTime.getDate() + 1);
+    }
+    const airingAtDate = scheduledTime;
+    const delayMins = 0;
 
     const scheduledJob: ScheduledJob = {
         id: jobId(Number(mediaId), Number(episode)),
